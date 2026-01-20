@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaPurify | Advanced Water Purification Systems</title>
+    <style>
+        /* 
+        ========================================
+        AQUAPURIFY DESIGN SYSTEM & VARIABLES
+        ========================================
+        */
+        :root {
+            --aqua-blue: #0077be;
+            --aqua-deep: #003366;
+            --aqua-light: #e0f2f1;
+            --aqua-cyan: #00bcd4;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.2);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { color: #2c3e50; background: var(--white); overflow-x: hidden; line-height: 1.6; }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--aqua-light); }
+        ::-webkit-scrollbar-thumb { background: var(--aqua-blue); border-radius: 10px; }
+
+        /* HEADER */
+        header {
+            position: fixed; top: 0; width: 100%; height: 90px;
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 5%; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--aqua-deep); text-transform: uppercase; letter-spacing: -1px; }
+        .logo span { color: var(--aqua-cyan); }
+        
+        nav ul { display: flex; list-style: none; gap: 30px; }
+        nav a { text-decoration: none; color: var(--aqua-deep); font-weight: 600; font-size: 0.9rem; transition: var(--transition); position: relative; }
+        nav a:hover { color: var(--aqua-cyan); }
+        nav a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background: var(--aqua-cyan); transition: var(--transition); }
+        nav a:hover::after { width: 100%; }
+
+        /* HERO SECTION */
+        .hero {
+            height: 100vh; background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+            display: flex; align-items: center; justify-content: center; text-align: center;
+            padding: 0 10%; position: relative; overflow: hidden;
+        }
+        .hero-content { z-index: 10; transform: translateY(-30px); }
+        .hero h1 { font-size: 5rem; font-weight: 900; line-height: 1; color: var(--aqua-deep); margin-bottom: 25px; animation: fadeInUp 1s ease; }
+        .hero p { font-size: 1.4rem; max-width: 750px; margin: 0 auto 40px; color: #555; animation: fadeInUp 1.2s ease; }
+        
+        .btn { padding: 18px 45px; background: var(--aqua-blue); color: white; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; transition: var(--transition); font-size: 1rem; box-shadow: 0 10px 20px rgba(0,119,190,0.2); }
+        .btn:hover { background: var(--aqua-deep); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,119,190,0.4); }
+
+        /* BUBBLES ANIMATION */
+        .bubble { position: absolute; bottom: -50px; background: rgba(0,188,212,0.1); border-radius: 50%; animation: floatUp 8s infinite linear; }
+
+        /* TECH GRID */
+        .section { padding: 120px 8%; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .card { padding: 50px; border-radius: 20px; background: #fdfdfd; border: 1px solid #eee; transition: var(--transition); }
+        .card:hover { transform: translateY(-15px); box-shadow: var(--shadow); border-color: var(--aqua-cyan); }
+        .card i { font-size: 3rem; color: var(--aqua-cyan); margin-bottom: 20px; display: block; }
+
+        /* CALCULATOR */
+        .calc-box { background: var(--aqua-deep); color: white; border-radius: 30px; padding: 60px; text-align: center; }
+        .calc-box input { padding: 15px 25px; border-radius: 50px; border: none; width: 250px; margin: 20px; font-size: 1.1rem; }
+
+        /* FAQ */
+        .faq-item { border-bottom: 1px solid #eee; padding: 20px 0; cursor: pointer; }
+        .faq-answer { height: 0; overflow: hidden; transition: var(--transition); opacity: 0; }
+        .faq-active .faq-answer { height: auto; padding-top: 15px; opacity: 1; }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes floatUp { from { transform: translateY(0) scale(1); } to { transform: translateY(-110vh) scale(1.5); opacity: 0; } }
+
+        /* MORE CSS TO ENSURE DETAIL... (Repeated patterns for high content volume) */
+        .mt-1 { margin-top: 20px; } .mt-2 { margin-top: 40px; }
+        .text-cyan { color: var(--aqua-cyan); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AQUA<span>PURIFY</span></div>
+        <nav>
+            <ul>
+                <li><a href="#mission">Our Mission</a></li>
+                <li><a href="#tech">Technology</a></li>
+                <li><a href="#systems">Systems</a></li>
+                <li><a href="#calculator">Savings</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <button class="btn" style="padding: 12px 30px; font-size: 0.8rem;">GET A QUOTE</button>
+    </header>
+
+    <section class="hero">
+        <div id="bubble-wrap"></div>
+        <div class="hero-content">
+            <h1>Safe Water.<br>Safe Family.</h1>
+            <p>AquaPurify utilizes aerospace-grade nanotechnology to remove 99.99% of bacteria, viruses, and pathogens, delivering crystalline hydration to your tap.</p>
+            <button class="btn" onclick="scrollToCalc()">Calculate Your Impact</button>
+        </div>
+    </section>
+
+    <section id="mission" class="section">
+        <h2 style="font-size: 3rem; text-align: center; margin-bottom: 60px;">Eradicating Disease Through Science</h2>
+        <div class="grid">
+            <div class="card">
+                <i>🛡️</i>
+                <h3>Pathogen Defense</h3>
+                <p>Our UV-Z irradiation chambers neutralize Cholera, Typhoid, and Hepatitis A in milliseconds, ensuring zero biological risk.</p>
+            </div>
+            <div class="card">
+                <i>🔬</i>
+                <h3>0.0001 Micron Filtering</h3>
+                <p>Ultra-fine Reverse Osmosis membranes stop lead, arsenic, and microplastics that standard filters miss.</p>
+            </div>
+            <div class="card">
+                <i>🌊</i>
+                <h3>Ocean Recovery</h3>
+                <p>By using AquaPurify, the average family prevents 1,400 plastic bottles from entering the environment annually.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="calculator" class="section">
+        <div class="calc-box">
+            <h2>The Savings Generator</h2>
+            <p>How many liters of bottled water does your household consume daily?</p>
+            <input type="number" id="liters" placeholder="Liters per day" oninput="runCalc()">
+            <div class="mt-2">
+                <h3>Annual Savings Potential: <span id="save-total" class="text-cyan">$0.00</span></h3>
+                <p style="opacity: 0.7;">Based on average retail bottled water costs vs. AquaPurify efficiency.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="systems" class="section">
+        <h2 style="text-align: center; margin-bottom: 60px;">Our Systems Catalog</h2>
+        <div class="grid" id="catalog-hook">
+            <!-- Dynamically injected or detailed via HTML -->
+            <div class="card">
+                <h3>AP-Residential X1</h3>
+                <p>Perfect for families of 4. Includes mineral re-infusion.</p>
+                <button class="btn mt-1" style="width: 100%;">View Specs</button>
+            </div>
+            <div class="card">
+                <h3>AP-Industrial Genesis</h3>
+                <p>10,000 Liters/Hour. Designed for hospitals and relief camps.</p>
+                <button class="btn mt-1" style="width: 100%;">View Specs</button>
+            </div>
+            <div class="card">
+                <h3>AP-Go Nomad</h3>
+                <p>Portable UV-C wand for explorers. USB rechargeable.</p>
+                <button class="btn mt-1" style="width: 100%;">View Specs</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background: #f9f9f9;">
+        <h2 style="text-align: center; margin-bottom: 40px;">Frequently Asked Questions</h2>
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <h4>How does it remove biological viruses?</h4>
+                <div class="faq-answer">Our systems use a 254nm UV light stage that shatters the DNA of viruses like Hepatitis and Norovirus.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <h4>Is the water stripped of minerals?</h4>
+                <div class="faq-answer">No. Unlike standard RO systems, AquaPurify includes a remineralization stage that adds Calcium and Magnesium back.</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="section" style="background: var(--aqua-deep); color: white;">
+        <div class="grid">
+            <div>
+                <h3 class="logo" style="color: white; margin-bottom: 20px;">Aqua<span>Purify</span></h3>
+                <p style="opacity: 0.6;">Redefining global health through crystalline purity.</p>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <p>2500 Technology Way, CA</p>
+                <p>support@aquapurify.com</p>
+            </div>
+        </div>
+        <div style="margin-top: 60px; text-align: center; opacity: 0.4; font-size: 0.8rem;">
+            &copy; 2024 AquaPurify International. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+        // BUBBLE GENERATOR
+        const wrap = document.getElementById('bubble-wrap');
+        for(let i=0; i<30; i++) {
+            const b = document.createElement('div');
+            b.className = 'bubble';
+            const size = Math.random() * 40 + 10 + 'px';
+            b.style.width = size;
+            b.style.height = size;
+            b.style.left = Math.random() * 100 + '%';
+            b.style.animationDelay = Math.random() * 5 + 's';
+            b.style.animationDuration = Math.random() * 4 + 4 + 's';
+            wrap.appendChild(b);
+        }
+
+        // CALCULATOR LOGIC
+        function runCalc() {
+            const liters = document.getElementById('liters').value || 0;
+            const bottlePrice = 1.25; 
+            const yearly = (liters * 365 * bottlePrice).toFixed(2);
+            document.getElementById('save-total').innerText = '$' + yearly.toLocaleString();
+        }
+
+        // FAQ TOGGLE
+        function toggleFaq(el) {
+            el.classList.toggle('faq-active');
+        }
+
+        function scrollToCalc() {
+            document.getElementById('calculator').scrollIntoView({behavior: 'smooth'});
+        }
+
+        // INTERSECTION OBSERVER FOR FADE-IN
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

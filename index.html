@@ -5,91 +5,362 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AquaPurify | Advanced Water Purification Systems</title>
     <style>
-        /* 
-        ========================================
-        AQUAPURIFY DESIGN SYSTEM & VARIABLES
-        ========================================
-        */
         :root {
             --aqua-blue: #0077be;
             --aqua-deep: #003366;
             --aqua-light: #e0f2f1;
             --aqua-cyan: #00bcd4;
             --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.2);
             --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             --shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { color: #2c3e50; background: var(--white); overflow-x: hidden; line-height: 1.6; }
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
-        /* SCROLLBAR */
+        body {
+            color: #2c3e50;
+            background: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        img { max-width: 100%; display: block; }
+
+        /* ── SCROLLBAR ── */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--aqua-light); }
         ::-webkit-scrollbar-thumb { background: var(--aqua-blue); border-radius: 10px; }
 
-        /* HEADER */
+        /* ── HEADER ── */
         header {
-            position: fixed; top: 0; width: 100%; height: 90px;
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 5%; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(255,255,255,0.93);
+            backdrop-filter: blur(15px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.07);
         }
-        .logo { font-size: 1.8rem; font-weight: 900; color: var(--aqua-deep); text-transform: uppercase; letter-spacing: -1px; }
+
+        .logo {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            font-weight: 900;
+            color: var(--aqua-deep);
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            white-space: nowrap;
+        }
         .logo span { color: var(--aqua-cyan); }
-        
-        nav ul { display: flex; list-style: none; gap: 30px; }
-        nav a { text-decoration: none; color: var(--aqua-deep); font-weight: 600; font-size: 0.9rem; transition: var(--transition); position: relative; }
+
+        /* Desktop nav */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: clamp(12px, 2vw, 30px);
+            flex-wrap: wrap;
+        }
+        nav a {
+            text-decoration: none;
+            color: var(--aqua-deep);
+            font-weight: 600;
+            font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+            transition: var(--transition);
+            position: relative;
+            white-space: nowrap;
+        }
         nav a:hover { color: var(--aqua-cyan); }
-        nav a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background: var(--aqua-cyan); transition: var(--transition); }
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0; height: 2px;
+            bottom: -5px; left: 0;
+            background: var(--aqua-cyan);
+            transition: var(--transition);
+        }
         nav a:hover::after { width: 100%; }
 
-        /* HERO SECTION */
-        .hero {
-            height: 100vh; background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
-            display: flex; align-items: center; justify-content: center; text-align: center;
-            padding: 0 10%; position: relative; overflow: hidden;
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+            z-index: 1100;
         }
-        .hero-content { z-index: 10; transform: translateY(-30px); }
-        .hero h1 { font-size: 5rem; font-weight: 900; line-height: 1; color: var(--aqua-deep); margin-bottom: 25px; animation: fadeInUp 1s ease; }
-        .hero p { font-size: 1.4rem; max-width: 750px; margin: 0 auto 40px; color: #555; animation: fadeInUp 1.2s ease; }
-        
-        .btn { padding: 18px 45px; background: var(--aqua-blue); color: white; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; transition: var(--transition); font-size: 1rem; box-shadow: 0 10px 20px rgba(0,119,190,0.2); }
-        .btn:hover { background: var(--aqua-deep); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,119,190,0.4); }
+        .hamburger span {
+            display: block;
+            width: 25px; height: 2px;
+            background: var(--aqua-deep);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-        /* BUBBLES ANIMATION */
-        .bubble { position: absolute; bottom: -50px; background: rgba(0,188,212,0.1); border-radius: 50%; animation: floatUp 8s infinite linear; }
+        /* Mobile drawer */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 70px; left: 0;
+            width: 100%; 
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(15px);
+            padding: 20px 5% 30px;
+            border-bottom: 1px solid rgba(0,0,0,0.07);
+            z-index: 999;
+            flex-direction: column;
+            gap: 0;
+        }
+        .mobile-nav.open { display: flex; }
+        .mobile-nav a {
+            text-decoration: none;
+            color: var(--aqua-deep);
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            transition: var(--transition);
+        }
+        .mobile-nav a:hover { color: var(--aqua-cyan); padding-left: 6px; }
 
-        /* TECH GRID */
-        .section { padding: 120px 8%; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
-        .card { padding: 50px; border-radius: 20px; background: #fdfdfd; border: 1px solid #eee; transition: var(--transition); }
-        .card:hover { transform: translateY(-15px); box-shadow: var(--shadow); border-color: var(--aqua-cyan); }
-        .card i { font-size: 3rem; color: var(--aqua-cyan); margin-bottom: 20px; display: block; }
+        .header-cta { display: block; }
 
-        /* CALCULATOR */
-        .calc-box { background: var(--aqua-deep); color: white; border-radius: 30px; padding: 60px; text-align: center; }
-        .calc-box input { padding: 15px 25px; border-radius: 50px; border: none; width: 250px; margin: 20px; font-size: 1.1rem; }
+        /* ── BUTTON ── */
+        .btn {
+            padding: 15px 38px;
+            background: var(--aqua-blue);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            box-shadow: 0 10px 20px rgba(0,119,190,0.2);
+            white-space: nowrap;
+        }
+        .btn:hover {
+            background: var(--aqua-deep);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0,119,190,0.4);
+        }
 
-        /* FAQ */
-        .faq-item { border-bottom: 1px solid #eee; padding: 20px 0; cursor: pointer; }
-        .faq-answer { height: 0; overflow: hidden; transition: var(--transition); opacity: 0; }
-        .faq-active .faq-answer { height: auto; padding-top: 15px; opacity: 1; }
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 100px 6% 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-content { z-index: 10; }
+        .hero h1 {
+            font-size: clamp(2.4rem, 8vw, 5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            color: var(--aqua-deep);
+            margin-bottom: 22px;
+            animation: fadeInUp 1s ease;
+        }
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            max-width: 750px;
+            margin: 0 auto 36px;
+            color: #555;
+            animation: fadeInUp 1.2s ease;
+        }
 
-        /* ANIMATIONS */
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes floatUp { from { transform: translateY(0) scale(1); } to { transform: translateY(-110vh) scale(1.5); opacity: 0; } }
+        /* Bubbles */
+        .bubble {
+            position: absolute;
+            bottom: -50px;
+            background: rgba(0,188,212,0.1);
+            border-radius: 50%;
+            animation: floatUp 8s infinite linear;
+        }
 
-        /* MORE CSS TO ENSURE DETAIL... (Repeated patterns for high content volume) */
-        .mt-1 { margin-top: 20px; } .mt-2 { margin-top: 40px; }
+        /* ── SECTIONS ── */
+        .section {
+            padding: clamp(60px, 10vw, 120px) clamp(5%, 8%, 8%);
+        }
+
+        .section-title {
+            font-size: clamp(1.6rem, 4vw, 3rem);
+            text-align: center;
+            margin-bottom: clamp(30px, 5vw, 60px);
+            color: var(--aqua-deep);
+        }
+
+        /* ── GRID ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+            gap: clamp(20px, 3vw, 40px);
+        }
+
+        .card {
+            padding: clamp(28px, 4vw, 50px);
+            border-radius: 20px;
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            transition: var(--transition);
+        }
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--shadow);
+            border-color: var(--aqua-cyan);
+        }
+        .card-icon {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--aqua-cyan);
+            margin-bottom: 16px;
+            display: block;
+        }
+        .card h3 {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            margin-bottom: 10px;
+            color: var(--aqua-deep);
+        }
+
+        /* ── CALCULATOR ── */
+        .calc-box {
+            background: var(--aqua-deep);
+            color: white;
+            border-radius: 30px;
+            padding: clamp(30px, 6vw, 60px) clamp(20px, 5vw, 60px);
+            text-align: center;
+        }
+        .calc-box h2 { font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 12px; }
+        .calc-box p  { font-size: clamp(0.9rem, 1.5vw, 1.1rem); margin-bottom: 8px; }
+
+        .calc-box input {
+            padding: 14px 22px;
+            border-radius: 50px;
+            border: none;
+            width: min(250px, 90%);
+            margin: 18px auto;
+            font-size: 1rem;
+            display: block;
+        }
+        .calc-result { margin-top: 28px; }
+        .calc-result h3 { font-size: clamp(1rem, 2vw, 1.4rem); }
         .text-cyan { color: var(--aqua-cyan); }
+        .calc-sub { opacity: 0.7; font-size: 0.9rem; margin-top: 8px; }
+
+        /* ── FAQ ── */
+        .faq-wrap { max-width: 800px; margin: 0 auto; }
+        .faq-item {
+            border-bottom: 1px solid #eee;
+            padding: 18px 0;
+            cursor: pointer;
+        }
+        .faq-item h4 { font-size: clamp(0.9rem, 1.6vw, 1rem); color: var(--aqua-deep); }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease, padding-top 0.3s ease;
+            opacity: 0;
+            font-size: 0.95rem;
+            color: #555;
+        }
+        .faq-active .faq-answer {
+            max-height: 200px;
+            padding-top: 12px;
+            opacity: 1;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--aqua-deep);
+            color: white;
+            padding: clamp(40px, 8vw, 80px) clamp(5%, 8%, 8%) clamp(20px, 4vw, 40px);
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+            gap: clamp(24px, 4vw, 48px);
+            margin-bottom: clamp(30px, 5vw, 60px);
+        }
+        footer h3.logo { color: white; margin-bottom: 14px; }
+        footer h4 { margin-bottom: 10px; font-size: 1rem; }
+        footer p  { opacity: 0.65; font-size: 0.9rem; line-height: 1.8; }
+        .footer-copy {
+            text-align: center;
+            opacity: 0.4;
+            font-size: 0.78rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: clamp(16px, 3vw, 24px);
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes floatUp {
+            from { transform: translateY(0) scale(1); opacity: 1; }
+            to   { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+        }
+
+        /* ── RESPONSIVE BREAKPOINTS ── */
+
+        /* Tablet (≤768px) */
+        @media (max-width: 768px) {
+            header { height: 64px; padding: 0 4%; }
+            nav { display: none; }
+            .header-cta { display: none; }
+            .hamburger { display: flex; }
+
+            .hero { padding: 90px 5% 50px; }
+
+            .grid { grid-template-columns: 1fr; }
+
+            .btn { padding: 14px 32px; }
+        }
+
+        /* Small phones (≤480px) */
+        @media (max-width: 480px) {
+            .calc-box { border-radius: 18px; }
+            .card    { border-radius: 14px; }
+
+            .section { padding: 50px 4%; }
+        }
+
+        /* Large desktop (≥1440px) */
+        @media (min-width: 1440px) {
+            .hero p { font-size: 1.5rem; }
+        }
+
+        /* iPad Pro landscape / wide tablets (769–1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+        }
     </style>
 </head>
 <body>
 
+    <!-- HEADER -->
     <header>
         <div class="logo">AQUA<span>PURIFY</span></div>
+
         <nav>
             <ul>
                 <li><a href="#mission">Our Mission</a></li>
@@ -99,11 +370,27 @@
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
-        <button class="btn" style="padding: 12px 30px; font-size: 0.8rem;">GET A QUOTE</button>
+
+        <button class="btn header-cta" style="padding:11px 26px;font-size:0.8rem;">GET A QUOTE</button>
+
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
+    <!-- MOBILE NAV DRAWER -->
+    <div class="mobile-nav" id="mobileNav" role="navigation">
+        <a href="#mission"    onclick="closeMenu()">Our Mission</a>
+        <a href="#tech"       onclick="closeMenu()">Technology</a>
+        <a href="#systems"    onclick="closeMenu()">Systems</a>
+        <a href="#calculator" onclick="closeMenu()">Savings</a>
+        <a href="#contact"    onclick="closeMenu()">Contact</a>
+        <button class="btn" style="margin-top:18px;width:100%;text-align:center;">GET A QUOTE</button>
+    </div>
+
+    <!-- HERO -->
     <section class="hero">
-        <div id="bubble-wrap"></div>
+        <div id="bubble-wrap" aria-hidden="true"></div>
         <div class="hero-content">
             <h1>Safe Water.<br>Safe Family.</h1>
             <p>AquaPurify utilizes aerospace-grade nanotechnology to remove 99.99% of bacteria, viruses, and pathogens, delivering crystalline hydration to your tap.</p>
@@ -111,64 +398,67 @@
         </div>
     </section>
 
+    <!-- MISSION -->
     <section id="mission" class="section">
-        <h2 style="font-size: 3rem; text-align: center; margin-bottom: 60px;">Eradicating Disease Through Science</h2>
+        <h2 class="section-title">Eradicating Disease Through Science</h2>
         <div class="grid">
             <div class="card">
-                <i>🛡️</i>
+                <span class="card-icon" aria-hidden="true">🛡️</span>
                 <h3>Pathogen Defense</h3>
                 <p>Our UV-Z irradiation chambers neutralize Cholera, Typhoid, and Hepatitis A in milliseconds, ensuring zero biological risk.</p>
             </div>
             <div class="card">
-                <i>🔬</i>
+                <span class="card-icon" aria-hidden="true">🔬</span>
                 <h3>0.0001 Micron Filtering</h3>
                 <p>Ultra-fine Reverse Osmosis membranes stop lead, arsenic, and microplastics that standard filters miss.</p>
             </div>
             <div class="card">
-                <i>🌊</i>
+                <span class="card-icon" aria-hidden="true">🌊</span>
                 <h3>Ocean Recovery</h3>
                 <p>By using AquaPurify, the average family prevents 1,400 plastic bottles from entering the environment annually.</p>
             </div>
         </div>
     </section>
 
+    <!-- CALCULATOR -->
     <section id="calculator" class="section">
         <div class="calc-box">
             <h2>The Savings Generator</h2>
             <p>How many liters of bottled water does your household consume daily?</p>
-            <input type="number" id="liters" placeholder="Liters per day" oninput="runCalc()">
-            <div class="mt-2">
+            <input type="number" id="liters" placeholder="Liters per day" inputmode="numeric" min="0" oninput="runCalc()">
+            <div class="calc-result">
                 <h3>Annual Savings Potential: <span id="save-total" class="text-cyan">$0.00</span></h3>
-                <p style="opacity: 0.7;">Based on average retail bottled water costs vs. AquaPurify efficiency.</p>
+                <p class="calc-sub">Based on average retail bottled water costs vs. AquaPurify efficiency.</p>
             </div>
         </div>
     </section>
 
+    <!-- SYSTEMS -->
     <section id="systems" class="section">
-        <h2 style="text-align: center; margin-bottom: 60px;">Our Systems Catalog</h2>
-        <div class="grid" id="catalog-hook">
-            <!-- Dynamically injected or detailed via HTML -->
+        <h2 class="section-title">Our Systems Catalog</h2>
+        <div class="grid">
             <div class="card">
                 <h3>AP-Residential X1</h3>
                 <p>Perfect for families of 4. Includes mineral re-infusion.</p>
-                <button class="btn mt-1" style="width: 100%;">View Specs</button>
+                <button class="btn" style="width:100%;margin-top:20px;">View Specs</button>
             </div>
             <div class="card">
                 <h3>AP-Industrial Genesis</h3>
                 <p>10,000 Liters/Hour. Designed for hospitals and relief camps.</p>
-                <button class="btn mt-1" style="width: 100%;">View Specs</button>
+                <button class="btn" style="width:100%;margin-top:20px;">View Specs</button>
             </div>
             <div class="card">
                 <h3>AP-Go Nomad</h3>
                 <p>Portable UV-C wand for explorers. USB rechargeable.</p>
-                <button class="btn mt-1" style="width: 100%;">View Specs</button>
+                <button class="btn" style="width:100%;margin-top:20px;">View Specs</button>
             </div>
         </div>
     </section>
 
-    <section class="section" style="background: #f9f9f9;">
-        <h2 style="text-align: center; margin-bottom: 40px;">Frequently Asked Questions</h2>
-        <div style="max-width: 800px; margin: 0 auto;">
+    <!-- FAQ -->
+    <section class="section" style="background:#f9f9f9;">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq-wrap">
             <div class="faq-item" onclick="toggleFaq(this)">
                 <h4>How does it remove biological viruses?</h4>
                 <div class="faq-answer">Our systems use a 254nm UV light stage that shatters the DNA of viruses like Hepatitis and Norovirus.</div>
@@ -177,64 +467,88 @@
                 <h4>Is the water stripped of minerals?</h4>
                 <div class="faq-answer">No. Unlike standard RO systems, AquaPurify includes a remineralization stage that adds Calcium and Magnesium back.</div>
             </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <h4>How often do filters need replacing?</h4>
+                <div class="faq-answer">Our filters are rated for 12 months under normal household use. The smart indicator light will alert you when it's time.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <h4>Is installation difficult?</h4>
+                <div class="faq-answer">Most residential models snap into place under the sink in under 30 minutes with no plumbing tools. Full video guides are included.</div>
+            </div>
         </div>
     </section>
 
-    <footer class="section" style="background: var(--aqua-deep); color: white;">
-        <div class="grid">
+    <!-- FOOTER -->
+    <footer id="contact">
+        <div class="footer-grid">
             <div>
-                <h3 class="logo" style="color: white; margin-bottom: 20px;">Aqua<span>Purify</span></h3>
-                <p style="opacity: 0.6;">Redefining global health through crystalline purity.</p>
+                <h3 class="logo">Aqua<span>Purify</span></h3>
+                <p>Redefining global health through crystalline purity.</p>
             </div>
             <div>
                 <h4>Contact</h4>
                 <p>2500 Technology Way, CA</p>
                 <p>support@aquapurify.com</p>
             </div>
+            <div>
+                <h4>Products</h4>
+                <p>AP-Residential X1</p>
+                <p>AP-Industrial Genesis</p>
+                <p>AP-Go Nomad</p>
+            </div>
         </div>
-        <div style="margin-top: 60px; text-align: center; opacity: 0.4; font-size: 0.8rem;">
-            &copy; 2024 AquaPurify International. All Rights Reserved.
-        </div>
+        <div class="footer-copy">&copy; 2024 AquaPurify International. All Rights Reserved.</div>
     </footer>
 
     <script>
-        // BUBBLE GENERATOR
+        /* ── BUBBLES ── */
         const wrap = document.getElementById('bubble-wrap');
-        for(let i=0; i<30; i++) {
+        for (let i = 0; i < 25; i++) {
             const b = document.createElement('div');
             b.className = 'bubble';
-            const size = Math.random() * 40 + 10 + 'px';
-            b.style.width = size;
-            b.style.height = size;
-            b.style.left = Math.random() * 100 + '%';
-            b.style.animationDelay = Math.random() * 5 + 's';
-            b.style.animationDuration = Math.random() * 4 + 4 + 's';
+            const size = (Math.random() * 40 + 10) + 'px';
+            b.style.cssText = `width:${size};height:${size};left:${Math.random()*100}%;animation-delay:${Math.random()*5}s;animation-duration:${Math.random()*4+4}s;`;
             wrap.appendChild(b);
         }
 
-        // CALCULATOR LOGIC
-        function runCalc() {
-            const liters = document.getElementById('liters').value || 0;
-            const bottlePrice = 1.25; 
-            const yearly = (liters * 365 * bottlePrice).toFixed(2);
-            document.getElementById('save-total').innerText = '$' + yearly.toLocaleString();
+        /* ── HAMBURGER ── */
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('mobileNav');
+        hamburger.addEventListener('click', () => {
+            const open = mobileNav.classList.toggle('open');
+            hamburger.classList.toggle('open', open);
+            hamburger.setAttribute('aria-expanded', open);
+        });
+        function closeMenu() {
+            mobileNav.classList.remove('open');
+            hamburger.classList.remove('open');
+            hamburger.setAttribute('aria-expanded', false);
         }
 
-        // FAQ TOGGLE
+        /* ── CALCULATOR ── */
+        function runCalc() {
+            const liters = parseFloat(document.getElementById('liters').value) || 0;
+            const yearly = (liters * 365 * 1.25).toFixed(2);
+            document.getElementById('save-total').innerText = '$' + Number(yearly).toLocaleString(undefined, {minimumFractionDigits:2});
+        }
+
+        /* ── FAQ ── */
         function toggleFaq(el) {
             el.classList.toggle('faq-active');
         }
 
+        /* ── SCROLL ── */
         function scrollToCalc() {
-            document.getElementById('calculator').scrollIntoView({behavior: 'smooth'});
+            document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // INTERSECTION OBSERVER FOR FADE-IN
+        /* ── INTERSECTION OBSERVER (card fade-in) ── */
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = 1;
                     entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.1 });
@@ -242,7 +556,7 @@
         document.querySelectorAll('.card').forEach(card => {
             card.style.opacity = 0;
             card.style.transform = 'translateY(30px)';
-            card.style.transition = 'all 0.6s ease';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             observer.observe(card);
         });
     </script>
